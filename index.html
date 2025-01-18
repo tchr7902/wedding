@@ -75,6 +75,8 @@
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
+            response.textContent = 'Sending email...';
+
             const data = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
