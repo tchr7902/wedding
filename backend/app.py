@@ -1,98 +1,122 @@
 from flask import Flask, request, jsonify
-import mysql.connector
-from mysql.connector import Error
+from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from flask_cors import CORS
 import os
-import boto3
-from botocore.exceptions import ClientError
 
-# Load environment variables from .env file
-load_dotenv('../../.env')
-
+# Initialize Flask app
 app = Flask(__name__)
+
+# Load environment variables
+load_dotenv('../.env')
+
+# Flask-Mail Configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL')
+app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD') 
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
 CORS(app)
 
-api_key = os.getenv('API_KEY')
-DB_CONFIG = {
-    "host": os.getenv('DB_HOST'),
-    "user": os.getenv('DB_USER'),
-    "password": os.getenv('DB_PASS'),
-    "database": os.getenv('DB_NAME'),
-}
-
-# Debugging the environment variables to confirm they are loaded correctly
-print("AWS Access Key ID:", os.getenv('ACCESS_KEY_ID'))
-print("AWS Secret Access Key:", os.getenv('SECRET_ACCESS_KEY'))
-print("AWS Region:", os.getenv('AWS_DEFAULT_REGION'))
-
-# Initialize AWS SNS Client
-sns_client = boto3.client('sns', 
-                          aws_access_key_id=os.getenv('ACCESS_KEY_ID'), 
-                          aws_secret_access_key=os.getenv('SECRET_ACCESS_KEY'),
-                          region_name='us-east-1')
-
-def send_sms_via_aws(phone_number, message_body):
-    """
-    Send SMS via AWS SNS.
-    :param phone_number: Phone number in international format (e.g., +18551234567).
-    :param message_body: Message content to send.
-    """
-    try:
-        response = sns_client.publish(
-            PhoneNumber=phone_number,
-            Message=message_body,
-            MessageType='Transactional'  # 'Promotional' is another option.
-        )
-        print(f"SMS sent! Message ID: {response['MessageId']}")
-        return True
-    except ClientError as e:
-        print(f"Error sending SMS: {e}")
-        # Print more error details for debugging
-        print(f"Error details: {e.response['Error']}")
-        return False
+# Initialize Flask-Mail
+mail = Mail(app)
 
 @app.route('/submit', methods=['POST'])
-def submit_form():
-    """
-    Handle form submission and save data to database.
-    """
-    data = request.json
-    name = data.get('name')
-    phone_number = data.get('phone')
-    email_address = data.get('email')
-    address = data.get('address')
+def submit():
+    form_data = request.get_json()
 
+    if not all(key in form_data for key in ('name', 'phone', 'email', 'address')):
+        return jsonify(message="Missing required field(s)"), 400
+    
+    print('Request received with the following data:')
+    print(form_data)
+
+    # Email to recipient
+    recipient_email = form_data['email']
+    msg_to_recipient = Message(
+        "Meeks Wedding - Save the Date",
+        sender=app.config['MAIL_USERNAME'],
+        recipients=[recipient_email]
+    )
+
+    msg_to_recipient.html = """
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: black;
+                }
+                .bold {
+                    font-weight: bold;
+                }
+                .section-title {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-top: 10px;
+                }
+                .date {
+                    font-size: 20px;
+                    margin-bottom: 15px;
+                    font-weight: bold;
+                }
+                .address {
+                    font-size: 14px;
+                }
+
+                p {
+                    margin: 0;
+                }
+            </style>
+        </head>
+        <body>
+            <p class="date">Madison and Bradley - May 1st, 2025</p>
+
+            <p class="section-title"><span class="bold">Venue:</span></p>
+            <p class="address"><span class="bold">Millennial Falls Event Center -</span> 12375 S 1300 E, Draper, UT 84020</p>
+
+            <p class="section-title"><span class="bold">Hotels:</span></p>
+            
+            <p class="address"><span class="bold">Hampton Inn -</span> 13711 S 200 W, Draper, UT 84020</p>
+            <p class="address"><span class="bold">HomeWood Suites by Hilton -</span> 437 W 13490 S, Draper, UT 84020</p>
+            <p class="address"><span class="bold">Quality Inn -</span> 12033 S State Street, Draper, UT 84020</p>
+        </body>
+    </html>
+    """
+    
+    # Email to admin (self) with form data
+    admin_email = app.config['MAIL_USERNAME']
+    msg_to_self = Message(
+        "Meeks Wedding - Save the Date",
+        sender=app.config['MAIL_USERNAME'],
+        recipients=[admin_email]
+    )
+    msg_to_self.body = f"""
+    New Save the Date Request:
+
+    Name: {form_data['name']}
+    Phone: {form_data['phone']}
+    Email: {form_data['email']}
+    Address: {form_data['address']}
+    """
+    
     try:
-        print(f'Received: {data}')
+        # Send the first email (to recipient)
+        mail.send(msg_to_recipient)
 
-        #connection = mysql.connector.connect(**DB_CONFIG)
-        # cursor = connection.cursor()
-        # Uncomment to insert into your database
-        # cursor.execute(
-        #     "INSERT INTO contacts (name, phone_number, address, email_address) VALUES (%s, %s, %s, %s)",
-        #     (name, phone_number, address, email_address)
-        # )
-        # connection.commit()
+        # Send the second email (to self)
+        mail.send(msg_to_self)
 
-        sms_message = f"Hello {name}! Thank you for your submission."
-        
-        # Send SMS via AWS SNS
-        if send_sms_via_aws(phone_number, sms_message):
-            print(f"SMS sent to {phone_number}")
-        else:
-            print(f"Failed to send SMS to {phone_number}")
+        return jsonify(message="Form submitted successfully! Emails have been sent."), 200
 
-        return jsonify({"message": "Success!"}), 200
-    except Error as e:
-        return jsonify({"message": f"Database Error: {e}"}), 500
-    except Exception as ex:
-        return jsonify({"message": f"Unexpected Error: {ex}"}), 500
-    finally:
- #       if 'connection' in locals() and connection.is_connected():
- #           cursor.close()
- #           connection.close()
-        print('worked')
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify(message=f"Error sending emails: {str(e)}"), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
