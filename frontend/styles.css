@@ -212,7 +212,16 @@ html, body {
 .wedding-info h2 {
     font-family: "Lora", "Georgia", serif;
     margin-bottom: 10px; 
-    font-size: 2.25rem;
+    font-size: 1.75rem;
+    color: #ffffff; 
+    font-weight: bold;
+    text-align: center; 
+}
+
+.wedding-info h1 {
+    font-family: "Great Vibes", "Alex Brush", "Dancing Script", "Snell Roundhand", "Brush Script MT", "Lucida Handwriting", cursive;
+    margin-bottom: -10px; 
+    font-size: 4rem;
     color: #ffffff; 
     font-weight: bold;
     text-align: center; 
@@ -220,7 +229,7 @@ html, body {
 
 .wedding-info p {
     font-family: "Lora", "Georgia", serif;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #ffffff;
     text-align: center; 
     line-height: 1.6; 
