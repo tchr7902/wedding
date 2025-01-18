@@ -1,26 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
-from dotenv import load_dotenv
 from flask_cors import CORS
 import os
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# Load environment variables
-load_dotenv('../.env')
-
 # Flask-Mail Configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = os.getenv('EMAIL')
-app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD') 
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL')  # Render handles environment variables
+app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')  # Set this in Render
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
-CORS(app)
+CORS(app, origins=["https://wedding-32ve.onrender.com/"])
 
-# Initialize Flask-Mail
 mail = Mail(app)
 
 @app.route('/submit', methods=['POST'])
@@ -29,11 +24,10 @@ def submit():
 
     if not all(key in form_data for key in ('name', 'phone', 'email', 'address')):
         return jsonify(message="Missing required field(s)"), 400
-    
+
     print('Request received with the following data:')
     print(form_data)
 
-    # Email to recipient
     recipient_email = form_data['email']
     msg_to_recipient = Message(
         "Meeks Wedding - Save the Date",
@@ -88,8 +82,7 @@ def submit():
         </body>
     </html>
     """
-    
-    # Email to admin (self) with form data
+
     admin_email = app.config['MAIL_USERNAME']
     msg_to_self = Message(
         "Meeks Wedding - Save the Date",
@@ -104,12 +97,10 @@ def submit():
     Email: {form_data['email']}
     Address: {form_data['address']}
     """
-    
+
     try:
-        # Send the first email (to recipient)
         mail.send(msg_to_recipient)
 
-        # Send the second email (to self)
         mail.send(msg_to_self)
 
         return jsonify(message="Form submitted successfully! Emails have been sent."), 200
@@ -119,4 +110,4 @@ def submit():
         return jsonify(message=f"Error sending emails: {str(e)}"), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
