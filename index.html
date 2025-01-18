@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page App</title>
+    <link rel="stylesheet" href="./frontend/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&family=Dancing+Script&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="landing-page">
+        <div class="landing-body">
+            <img class="landing-image" src="./frontend/images/IMG_4947.jpg">
+            <div class="landing-page-body-div">
+                <p class="madi">Madison Yates</p>
+                <p class="and">and</p>
+                <p class="bradley">Bradley Meeks</p>
+                <div class="std-div">
+                    <p class="save-the-date">Save The Date</p>
+                    <div class="scroll-arrow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-page">
+
+        <div class="wedding-info">
+            <div class="info-div">
+                <div class="venue">
+                    <h2>Millennial Falls Event Center</h2>
+                    <p>12375 S 1300 E<br>
+                    Draper, UT 84020<br>
+                    United States</p>
+                </div>
+            
+                <div class="hotel-1">
+                    <h2>Hotel 1</h2>
+                    <p>Address</p>
+                </div>
+            
+                <div class="hotel-2">
+                    <h2>Hotel 2</h2>
+                    <p>Address</p>
+                </div>
+            
+                <div class="hotel-3">
+                    <h2>Hotel 3</h2>
+                    <p>Address</p>
+                </div>
+            </div>
+        </div>
+        
+
+    <div class="form-container">
+        <h2>May 1st, 2025</h2>
+        <form id="userForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="address" placeholder="Street Address" required>
+            <button class="button-28" role="button" type="submit">Save the Date!</button>
+        </form>
+        <p id="response"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('userForm');
+        const response = document.getElementById('response');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value
+            };
+
+            try {
+                const res = await fetch('http://127.0.0.1:5000/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                response.textContent = result.message;
+            } catch (error) {
+                response.textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+    </div>
+</body>
+</html>
