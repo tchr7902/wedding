@@ -103,7 +103,7 @@ def submit():
         mail.send(msg_to_recipient)
         mail.send(msg_to_self)
 
-        return jsonify(message="Form submitted successfully! Emails have been sent."), 200
+        return jsonify(message="Form submitted successfully! An email has been sent to you."), 200
 
     except Exception as e:
         print(f"Error: {str(e)}")

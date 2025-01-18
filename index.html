@@ -90,8 +90,17 @@
                 });
                 const result = await res.json();
                 response.textContent = result.message;
+
+                setTimeout(() => {
+                response.textContent = '';
+            }, 10000);
+
             } catch (error) {
                 response.textContent = 'Error: ' + error.message;
+
+                setTimeout(() => {
+                response.textContent = '';
+            }, 10000);
             }
         });
     </script>
