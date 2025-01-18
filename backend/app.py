@@ -1,12 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import os
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Flask-Mail Configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = os.getenv('EMAIL') 
@@ -14,12 +12,16 @@ app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
-CORS(app, origins=["https://wedding-32ve.onrender.com/", "https://www.meekswedding.com"])
+CORS(app, origins=["https://wedding-32ve.onrender.com", "https://www.meekswedding.com"])
 
 mail = Mail(app)
 
 @app.route('/submit', methods=['POST', 'OPTIONS'])
+@cross_origin(origin='https://www.meekswedding.com') 
 def submit():
+    if request.method == 'OPTIONS': 
+        return '', 200 
+
     form_data = request.get_json()
 
     if not all(key in form_data for key in ('name', 'phone', 'email', 'address')):
@@ -34,7 +36,6 @@ def submit():
         sender=app.config['MAIL_USERNAME'],
         recipients=[recipient_email]
     )
-
     msg_to_recipient.html = """
     <!DOCTYPE html>
     <html>
@@ -100,7 +101,6 @@ def submit():
 
     try:
         mail.send(msg_to_recipient)
-
         mail.send(msg_to_self)
 
         return jsonify(message="Form submitted successfully! Emails have been sent."), 200
