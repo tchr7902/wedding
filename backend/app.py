@@ -9,16 +9,16 @@ app = Flask(__name__)
 # Flask-Mail Configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = os.getenv('EMAIL')  # Render handles environment variables
-app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')  # Set this in Render
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL') 
+app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD') 
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
-CORS(app, origins=["https://wedding-32ve.onrender.com/"])
+CORS(app, origins=["https://wedding-32ve.onrender.com/", "https://www.meekswedding.com"])
 
 mail = Mail(app)
 
-@app.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['POST', 'OPTIONS'])
 def submit():
     form_data = request.get_json()
 
