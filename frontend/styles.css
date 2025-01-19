@@ -203,7 +203,6 @@ html, body {
     background-size: cover; 
     background-position: center 5%; 
     background-repeat: no-repeat; 
-    padding: 10px; 
 }
 
 
@@ -311,7 +310,7 @@ html, body {
     .landing-image {
         padding: 0;
         margin: 0;
-        width: 120%;
+        width: 100%;
         height: 90vh;
         object-fit: cover;
         object-position: 15%;
@@ -557,7 +556,7 @@ html, body {
       -webkit-user-select: none;
       touch-action: manipulation;
       width: 100%;
-      max-width: 150px;
+      max-width: 170px;
       height: 45px;
       will-change: transform;
     }
@@ -585,7 +584,7 @@ html, body {
         padding: 0;
         margin: 0;
         width: 100%;
-        height: 110vh;
+        height: 100vh;
         object-fit: cover;
         object-position: 15%;
     }
@@ -595,6 +594,6 @@ html, body {
     }
 
     .wedding-info {
-        height: 110vh;
+        height: 100vh;
     }
 }
