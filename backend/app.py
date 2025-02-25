@@ -32,7 +32,7 @@ def submit():
 
     recipient_email = form_data['email']
     msg_to_recipient = Message(
-        "Meeks Wedding - Save the Date",
+        "Meeks Wedding - RSVP",
         sender=app.config['MAIL_USERNAME'],
         recipients=[recipient_email]
     )
@@ -71,6 +71,8 @@ def submit():
         </head>
         <body>
             <p class="date">Madison and Bradley - May 1st, 2025</p>
+
+            <p class="address">Thank you for RSVPing! We're excited to see you there.</p>
 
             <p class="section-title"><span class="bold">Venue:</span></p>
             <p class="address"><span class="bold">Millennial Falls Event Center -</span> 12375 S 1300 E, Draper, UT 84020</p>
