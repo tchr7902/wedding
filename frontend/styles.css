@@ -193,7 +193,6 @@ html, body {
 
 .wedding-info {
     width: 50%;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -202,7 +201,7 @@ html, body {
     background-image: url('./images/Tezza-4448.JPG'); 
     background-size: cover; 
     background-position: center 5%; 
-    background-repeat: no-repeat; 
+    background-repeat: no-repeat;
 }
 
 
@@ -240,6 +239,20 @@ html, body {
 .wedding-info p br {
     content: '\A';
     white-space: pre-line; 
+}
+
+.disclaimer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Lora", "Georgia", serif;
+    margin: 10px 20px;
+}
+
+.info-div {
+    margin-top: 30px;
+    margin-bottom: 50px;
 }
 
 .button-28 {
@@ -301,19 +314,17 @@ html, body {
     }
     
     .landing-page {
-        padding: 0px;
-        margin: 0px;
+        padding: 0;
+        margin: 0;
     }
     
     .landing-body {
         position: relative;
         display: flex;    
-        align-items: center; 
+        align-items: center;
     }
     
     .landing-image {
-        padding: 0;
-        margin: 0;
         width: 100%;
         height: 90vh;
         object-fit: cover;
@@ -324,95 +335,28 @@ html, body {
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%; 
-        height: 100%;
-        z-index: 1;
+        width: 100%;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
         color: white;
         text-align: center;
-    }
-    
-    
-    .landing-page-body-div .madi {
-        font-family: "Great Vibes", "Alex Brush", "Dancing Script", "Snell Roundhand", "Brush Script MT", "Lucida Handwriting", cursive;
-        position: absolute;
-        text-shadow: 2px 2px #000000;
-        width: auto;
-        top: 22%;
-        left: 53.5%; 
-        transform: translate(-60%, -70%);
-        z-index: 1;
-        font-size: 5rem;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .landing-page-body-div .and {
-        font-family: "Great Vibes", "Alex Brush", "Dancing Script", "Snell Roundhand", "Brush Script MT", "Lucida Handwriting", cursive;
-        position: absolute;
-        text-shadow: 2px 2px #000000;
-        width: auto;
-        top: 31%; 
-        left: 67%;
-        transform: translate(-150%, 10%);
-        z-index: 1;
-        font-size: 4rem;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .landing-page-body-div .bradley {
-        position: absolute;
-        font-family: "Great Vibes", "Alex Brush", "Dancing Script", "Snell Roundhand", "Brush Script MT", "Lucida Handwriting", cursive;
-        text-shadow: 2px 2px #000000;
-        width: auto;
-        top: 42%; 
-        left: 80%; 
-        transform: translate(-110%, 10%);
-        z-index: 1;
-        font-size: 5rem;
-        padding: 0;
-        margin: 0;
-        white-space: wrap;
-    }
-    
-    .landing-page-body-div .save-the-date {
-        position: absolute;
-        font-family: "Lora", "Georgia", serif;
-        width: auto;
-        top: 88.5%; 
-        left: 50%; 
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        font-size: 2rem;
-        padding: 0;
-        margin: 0;
-        white-space: nowrap;
-    }
-    
-    .landing-page-body-div .date {
-        position: absolute;
-        font-family: "Lora", "Georgia", serif;
-        width: auto;
-        top: 87%; 
-        left: 50%; 
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        font-size: 2rem;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .scroll-arrow {
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: 90%;
-        left: 50%;
-        margin: 20px auto 0; 
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 20px solid white;
-    }
+      }
+      
+      .landing-page-body-div .madi,
+      .landing-page-body-div .and,
+      .landing-page-body-div .bradley,
+      .landing-page-body-div .std-div {
+        position: static;
+        transform: none;
+        text-wrap: wrap;
+      }
+
+      .landing-page-body-div {
+        margin: 50px 0 0;
+      }
     
     .form-page {
         display: flex;
@@ -489,12 +433,11 @@ html, body {
     
     .wedding-info {
         width: 100%;
-        height: 100vh;
         font-family: Arial, sans-serif;
         background-image: url('./images/Tezza-4448.JPG'); 
         background-size: cover; 
         background-position: center 5%; 
-        background-repeat: no-repeat; 
+        background-repeat: no-repeat;
     }
     
     .wedding-info h2 {
@@ -534,7 +477,8 @@ html, body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-top: -100px;
+        margin-top: 30px;
+        margin-bottom: 50px;
     }
     
     .button-28 {
@@ -594,10 +538,8 @@ html, body {
     }
 
     .info-div {
-        margin-top: 0px;
+        margin-top: 30px;
+        margin-bottom: 50px;
     }
 
-    .wedding-info {
-        height: 100vh;
-    }
 }
