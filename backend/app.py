@@ -12,7 +12,7 @@ app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
-CORS(app, origins=["https://wedding-32ve.onrender.com", "https://www.meekswedding.com"])
+CORS(app, origins=["https://wedding-838j.onrender.com", "https://www.meekswedding.com"])
 
 mail = Mail(app)
 
